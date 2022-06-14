@@ -1,5 +1,6 @@
 package cl.uchile.dcc.citricliquid.model;
 
+import cl.uchile.dcc.citricliquid.model.unidades.Player;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
