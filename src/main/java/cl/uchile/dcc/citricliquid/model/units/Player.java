@@ -1,8 +1,8 @@
-package cl.uchile.dcc.citricliquid.model.unidades;
+package cl.uchile.dcc.citricliquid.model.units;
 
 import cl.uchile.dcc.citricliquid.model.normas.InterfaceNorma;
-
-import java.util.Random;
+import cl.uchile.dcc.citricliquid.model.normas.StarsNorma;
+import cl.uchile.dcc.citricliquid.model.normas.WinsNorma;
 
 /**
  * This class represents a player in the game 99.7% Citric Liquid.
@@ -10,7 +10,7 @@ import java.util.Random;
 public class Player extends AbstractUnit{
   private int normaLevel;
   private int wins;
-  private InterfaceNorma normaGoal;
+  public InterfaceNorma normaGoal;
 
   /**
    * Constructor for the player, is the same constructor for the Abstract class
@@ -68,7 +68,7 @@ public class Player extends AbstractUnit{
    * Method that Checks the norma objective for this player, using the current set goal
    */
   public void normaCheck(){
-    normaGoal.checkNormaObjective(this);
+    this.getNormaGoal().checkNormaObjective(this);
   }
 
   /**

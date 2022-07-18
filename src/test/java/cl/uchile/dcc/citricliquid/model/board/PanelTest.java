@@ -1,127 +1,122 @@
 package cl.uchile.dcc.citricliquid.model.board;
 
-import cl.uchile.dcc.citricliquid.model.unidades.Player;
+import cl.uchile.dcc.citricliquid.model.units.Player;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * @author <a href="mailto:ignacio.slater@ug.uchile.cl">Ignacio Slater M.</a>.
- * @version 1.0.6-rc.1
- * @since 1.0
- */
 class PanelTest {
-  private final static String PLAYER_NAME = "Suguri";
-  private final static int BASE_HP = 4;
-  private final static int BASE_ATK = 1;
-  private final static int BASE_DEF = -1;
-  private final static int BASE_EVD = 2;
-  private Panel testHomePanel;
-  private Panel testNeutralPanel;
-  private Panel testBonusPanel;
-  private Panel testDropPanel;
-  private Panel testEncounterPanel;
-  private Panel testBossPanel;
-  private Player suguri;
-  private long testSeed;
+    private final static String PLAYER_NAME = "Suguri";
+    private Player suguri;
+    private InterfacePanel homePanel;
+    private InterfacePanel neutralPanel;
+    private InterfacePanel bonusPanel;
+    private InterfacePanel dropPanel;
+    private InterfacePanel encounterPanel;
+    private InterfacePanel bossPanel;
+    private InterfacePanel drawPanel;
 
-  @BeforeEach
-  public void setUp() {
-    testBonusPanel = new Panel(PanelType.BONUS);
-    testBossPanel = new Panel(PanelType.BOSS);
-    testDropPanel = new Panel(PanelType.DROP);
-    testEncounterPanel = new Panel(PanelType.ENCOUNTER);
-    testHomePanel = new Panel(PanelType.HOME);
-    testNeutralPanel = new Panel(PanelType.NEUTRAL);
-    testSeed = new Random().nextLong();
-    suguri = new Player(PLAYER_NAME, BASE_HP, BASE_ATK, BASE_DEF, BASE_EVD);
-  }
-
-  @Test
-  public void constructorTest() {
-    assertEquals(PanelType.BONUS, testBonusPanel.getType());
-    assertEquals(PanelType.BOSS, testBossPanel.getType());
-    assertEquals(PanelType.DROP, testDropPanel.getType());
-    assertEquals(PanelType.ENCOUNTER, testEncounterPanel.getType());
-    assertEquals(PanelType.HOME, testHomePanel.getType());
-    assertEquals(PanelType.NEUTRAL, testNeutralPanel.getType());
-  }
-
-  @Test
-  public void nextPanelTest() {
-    assertTrue(testNeutralPanel.getNextPanels().isEmpty());
-    final var expectedPanel1 = new Panel(PanelType.NEUTRAL);
-    final var expectedPanel2 = new Panel(PanelType.NEUTRAL);
-
-    testNeutralPanel.addNextPanel(expectedPanel1);
-    assertEquals(1, testNeutralPanel.getNextPanels().size());
-
-    testNeutralPanel.addNextPanel(expectedPanel2);
-    assertEquals(2, testNeutralPanel.getNextPanels().size());
-
-    testNeutralPanel.addNextPanel(expectedPanel2);
-    assertEquals(2, testNeutralPanel.getNextPanels().size());
-
-    assertEquals(Set.of(expectedPanel1, expectedPanel2),
-                 testNeutralPanel.getNextPanels());
-  }
-
-  @Test
-  public void homePanelTest() {
-    assertEquals(suguri.getMaxHp(), suguri.getCurrentHp());
-    testHomePanel.activatedBy(suguri);
-    assertEquals(suguri.getMaxHp(), suguri.getCurrentHp());
-
-    suguri.setCurrentHp(1);
-    testHomePanel.activatedBy(suguri);
-    assertEquals(2, suguri.getCurrentHp());
-  }
-
-  @Test
-  public void neutralPanelTest() {
-    final var expectedSuguri = suguri.copy();
-    testNeutralPanel.activatedBy(suguri);
-    assertEquals(expectedSuguri, suguri);
-  }
-
-  // region : Consistency tests
-  @RepeatedTest(100)
-  public void bonusPanelConsistencyTest() {
-    int expectedStars = 0;
-    assertEquals(expectedStars, suguri.getStars());
-    final var testRandom = new Random(testSeed);
-    suguri.setSeed(testSeed);
-    for (int normaLvl = 1; normaLvl <= 6; normaLvl++) {
-      final int roll = testRandom.nextInt(6) + 1;
-      testBonusPanel.activatedBy(suguri);
-      expectedStars += roll * Math.min(3, normaLvl);
-      assertEquals(expectedStars, suguri.getStars(),
-                   "Test failed with seed: " + testSeed);
-      suguri.normaClear();
+    @BeforeEach
+    public void setUp(){
+        suguri = new Player(PLAYER_NAME, 4, 1, 0, 2);
+        suguri.increaseStarsBy(10);
+        homePanel = new HomePanel(0);
+        neutralPanel = new NeutralPanel(1);
+        bonusPanel = new BonusPanel(2);
+        dropPanel = new DropPanel(3);
+        encounterPanel = new EncounterPanel(4);
+        bossPanel = new BossPanel(5);
+        drawPanel = new DrawPanel(6);
     }
-  }
 
-  @RepeatedTest(100)
-  public void dropPanelConsistencyTest() {
-    int expectedStars = 30;
-    suguri.increaseStarsBy(30);
-    assertEquals(expectedStars, suguri.getStars());
-    final var testRandom = new Random(testSeed);
-    suguri.setSeed(testSeed);
-    for (int normaLvl = 1; normaLvl <= 6; normaLvl++) {
-      final int roll = testRandom.nextInt(6) + 1;
-      testDropPanel.activatedBy(suguri);
-      expectedStars = Math.max(expectedStars - roll * normaLvl, 0);
-      assertEquals(expectedStars, suguri.getStars(),
-                   "Test failed with seed: " + testSeed);
-      suguri.normaClear();
+    @Test
+    public void getIdTest() {
+        Assertions.assertEquals(0,homePanel.getId());
     }
-  }
-  // endregion
+
+    @Test
+    public void nextPanelsTest() {
+        var list = new HashSet<InterfacePanel>();
+        Assertions.assertEquals(list, homePanel.getNextPanels());
+        list.add(neutralPanel);
+        list.add(bonusPanel);
+        homePanel.addNextPanel(neutralPanel);
+        homePanel.addNextPanel(bonusPanel);
+        Assertions.assertEquals(list,homePanel.getNextPanels());
+    }
+
+    @Test
+    public void playersInPanelTest() {
+        var list = new ArrayList<Player>();
+        Assertions.assertEquals(list, homePanel.getPlayersInPanel());
+        Assertions.assertFalse(homePanel.hasPlayersInPanel());
+        list.add(suguri);
+        homePanel.addPlayer(suguri);
+        Assertions.assertTrue(homePanel.hasPlayersInPanel());
+        Assertions.assertEquals(list, homePanel.getPlayersInPanel());
+        list.remove(suguri);
+        homePanel.removePlayer(suguri);
+        Assertions.assertEquals(list, homePanel.getPlayersInPanel());
+    }
+
+    @Test
+    public void equalsTest() {
+        var otherHomePanel = new HomePanel(0);
+        Assertions.assertTrue(otherHomePanel.equals(homePanel));
+        Assertions.assertFalse(otherHomePanel.equals(bonusPanel));
+    }
+
+    @Test
+    public void homePanelTest() {
+        suguri.setCurrentHp(3);
+        Assertions.assertEquals(3, suguri.getCurrentHp());
+        homePanel.activatedBy(suguri);
+        Assertions.assertEquals(4, suguri.getCurrentHp());
+        homePanel.activatedBy(suguri);
+        Assertions.assertEquals(4, suguri.getCurrentHp());
+    }
+
+
+    @RepeatedTest(100)
+    public void bonusPanelConsistencyTest() {
+        final long testSeed = new Random().nextLong();
+        int expectedStars = 0;
+        assertEquals(expectedStars, suguri.getStars());
+        final var testRandom = new Random(testSeed);
+        suguri.setSeed(testSeed);
+        for (int normaLvl = 1; normaLvl <= 6; normaLvl++) {
+            final int roll = testRandom.nextInt(6) + 1;
+            bonusPanel.activatedBy(suguri);
+            expectedStars += roll * Math.min(3, normaLvl);
+            assertEquals(expectedStars, suguri.getStars(),
+                    "Test failed with seed: " + testSeed);
+            suguri.normaClear();
+        }
+    }
+
+    @RepeatedTest(100)
+    public void dropPanelConsistencyTest() {
+        final long testSeed = new Random().nextLong();
+        final var testRandom = new Random(testSeed);
+        var stars = 10;
+        suguri.setSeed(testSeed);
+        for (int normaLvl = 1; normaLvl <= 6; normaLvl++) {
+            final int roll = testRandom.nextInt(6) + 1;
+            dropPanel.activatedBy(suguri);
+            stars = Math.max(stars - roll * normaLvl, 0);
+            assertEquals(stars, suguri.getStars(),
+                    "Test failed with seed: " + testSeed);
+            suguri.normaClear();
+        }
+    }
+
+
+
 }

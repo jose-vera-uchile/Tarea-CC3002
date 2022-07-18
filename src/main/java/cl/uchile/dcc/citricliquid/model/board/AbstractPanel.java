@@ -1,6 +1,6 @@
 package cl.uchile.dcc.citricliquid.model.board;
 
-import cl.uchile.dcc.citricliquid.model.unidades.Player;
+import cl.uchile.dcc.citricliquid.model.units.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -75,7 +75,7 @@ public abstract class AbstractPanel implements InterfacePanel{
      * @return
      */
     public boolean hasPlayersInPanel(){
-        if(playersInPanel.size()>1){
+        if(playersInPanel.size()>0){
             return true;
         }
         else {

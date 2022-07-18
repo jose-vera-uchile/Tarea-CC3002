@@ -1,4 +1,4 @@
-package cl.uchile.dcc.citricliquid.model.unidades;
+package cl.uchile.dcc.citricliquid.model.units;
 
 public class WildUnit extends AbstractUnit{
     /**
@@ -15,8 +15,7 @@ public class WildUnit extends AbstractUnit{
     }
 
     @Override
-    public InterfaceUnit copy() {
-        return new WildUnit(getName(), getMaxHp(), getAtk(), getDef(), getEvd());
-
+    public WildUnit copy() {
+        return new WildUnit(name, maxHp, atk, def, evd);
     }
 }

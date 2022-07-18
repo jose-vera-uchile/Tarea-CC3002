@@ -1,6 +1,6 @@
 package cl.uchile.dcc.citricliquid.model.normas;
 
-import cl.uchile.dcc.citricliquid.model.unidades.Player;
+import cl.uchile.dcc.citricliquid.model.units.Player;
 
 public interface InterfaceNorma {
     /**

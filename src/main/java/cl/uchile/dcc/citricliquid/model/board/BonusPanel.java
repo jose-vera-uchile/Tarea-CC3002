@@ -1,6 +1,6 @@
 package cl.uchile.dcc.citricliquid.model.board;
 
-import cl.uchile.dcc.citricliquid.model.unidades.Player;
+import cl.uchile.dcc.citricliquid.model.units.Player;
 
 public class BonusPanel extends AbstractPanel{
 
@@ -14,12 +14,12 @@ public class BonusPanel extends AbstractPanel{
     }
 
     /**
-     * Increases the amount of stars of a player. The amount is determined by a roll multiplied by the max
+     * Increases the amount of stars of a player. The amount is determined by a roll multiplied by the min
      * between the player's norma level and 3.
      * @param player
      */
     @Override
     public void activatedBy(Player player) {
-        player.increaseStarsBy(player.roll() * Math.max(player.getNormaLevel(), 3));
+        player.increaseStarsBy(player.roll() * Math.min(player.getNormaLevel(), 3));
     }
 }

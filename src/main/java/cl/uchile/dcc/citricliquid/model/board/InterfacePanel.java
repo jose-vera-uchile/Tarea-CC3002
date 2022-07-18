@@ -1,6 +1,6 @@
 package cl.uchile.dcc.citricliquid.model.board;
 
-import cl.uchile.dcc.citricliquid.model.unidades.Player;
+import cl.uchile.dcc.citricliquid.model.units.Player;
 import java.util.List;
 import java.util.Set;
 
@@ -17,6 +17,8 @@ public interface InterfacePanel {
     void addPlayer(Player player);
 
     void removePlayer(Player player);
+
+    boolean hasPlayersInPanel();
 
     void activatedBy(final Player player);
 

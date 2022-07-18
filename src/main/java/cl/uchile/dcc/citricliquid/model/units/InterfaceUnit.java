@@ -1,4 +1,4 @@
-package cl.uchile.dcc.citricliquid.model.unidades;
+package cl.uchile.dcc.citricliquid.model.units;
 
 public interface InterfaceUnit {
 

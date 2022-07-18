@@ -1,4 +1,4 @@
-package cl.uchile.dcc.citricliquid.model.unidades;
+package cl.uchile.dcc.citricliquid.model.units;
 
 import java.util.Random;
 
@@ -133,9 +133,11 @@ public abstract class AbstractUnit implements InterfaceUnit {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof final Player player)) {
+        if (!(o instanceof AbstractUnit player)) {
             return false;
         }
+        player = (AbstractUnit) o;
+
         return getMaxHp() == player.getMaxHp()
                 && getAtk() == player.getAtk()
                 && getDef() == player.getDef()

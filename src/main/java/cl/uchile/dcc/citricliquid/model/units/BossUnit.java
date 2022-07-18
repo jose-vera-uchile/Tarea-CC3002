@@ -1,4 +1,4 @@
-package cl.uchile.dcc.citricliquid.model.unidades;
+package cl.uchile.dcc.citricliquid.model.units;
 
 public class BossUnit extends AbstractUnit{
 
@@ -16,7 +16,7 @@ public class BossUnit extends AbstractUnit{
     }
 
     @Override
-    public InterfaceUnit copy() {
+    public BossUnit copy() {
         return new BossUnit(getName(), getMaxHp(), getAtk(), getDef(), getEvd());
     }
 }
