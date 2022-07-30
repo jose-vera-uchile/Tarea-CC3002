@@ -10,8 +10,8 @@ import java.util.Set;
 
 public abstract class AbstractPanel implements InterfacePanel{
     private final int id;
-    private final Set<InterfacePanel> nextPanels;
-    private final List<Player> playersInPanel;
+    private final ArrayList<InterfacePanel> nextPanels;
+    private final ArrayList<Player> playersInPanel;
 
     /**
      * Constructor for the abstract class, only receives the id
@@ -19,7 +19,7 @@ public abstract class AbstractPanel implements InterfacePanel{
      */
     protected AbstractPanel(int id) {
         this.id = id;
-        this.nextPanels = new HashSet<InterfacePanel>();
+        this.nextPanels = new ArrayList<InterfacePanel>();
         this.playersInPanel = new ArrayList<Player>();
     }
 
@@ -33,7 +33,7 @@ public abstract class AbstractPanel implements InterfacePanel{
     /**
      * @return next panels set
      */
-    public Set<InterfacePanel> getNextPanels() {
+    public ArrayList<InterfacePanel> getNextPanels() {
         return nextPanels;
     }
 
@@ -60,6 +60,7 @@ public abstract class AbstractPanel implements InterfacePanel{
      */
     public void addPlayer(Player player) {
         playersInPanel.add(player);
+        player.setCurrentPanel(this);
     }
 
     /**

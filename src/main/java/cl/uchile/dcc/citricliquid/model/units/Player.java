@@ -1,8 +1,12 @@
 package cl.uchile.dcc.citricliquid.model.units;
 
+import cl.uchile.dcc.citricliquid.model.board.InterfacePanel;
 import cl.uchile.dcc.citricliquid.model.normas.InterfaceNorma;
 import cl.uchile.dcc.citricliquid.model.normas.StarsNorma;
 import cl.uchile.dcc.citricliquid.model.normas.WinsNorma;
+
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 /**
  * This class represents a player in the game 99.7% Citric Liquid.
@@ -11,6 +15,8 @@ public class Player extends AbstractUnit{
   private int normaLevel;
   private int wins;
   public InterfaceNorma normaGoal;
+  public InterfacePanel currentPanel;
+  public InterfacePanel homePanel;
 
   /**
    * Constructor for the player, is the same constructor for the Abstract class
@@ -22,11 +28,30 @@ public class Player extends AbstractUnit{
    * @param def  the base defense of the character.
    * @param evd  the base evasion of the character.
    */
-  public Player(String name, int hp, int atk, int def, int evd) {
+  public Player(String name, int hp, int atk, int def, int evd, InterfacePanel homePanel) {
     super(name, hp, atk, def, evd);
     normaLevel=1;
     wins=0;
+    this.homePanel = homePanel;
+    this.currentPanel = homePanel;
   }
+
+  public InterfacePanel getCurrentPanel(){
+    return currentPanel;
+  }
+
+  public int getCurrentPanelID() {
+    return currentPanel.getId();
+  }
+
+  public void setCurrentPanel(InterfacePanel panel) {
+    this.currentPanel = panel;
+  }
+
+  public InterfacePanel getHomePanel(){
+    return homePanel;
+  }
+
 
   /**
    * Returns the current amount of wins
@@ -102,6 +127,6 @@ public class Player extends AbstractUnit{
    * Returns a copy of this character.
    */
   public Player copy() {
-    return new Player(name, maxHp, atk, def, evd);
+    return new Player(name, maxHp, atk, def, evd, homePanel);
   }
 }

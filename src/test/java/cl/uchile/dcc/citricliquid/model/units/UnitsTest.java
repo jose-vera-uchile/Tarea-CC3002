@@ -1,5 +1,8 @@
 package cl.uchile.dcc.citricliquid.model.units;
 
+import cl.uchile.dcc.citricliquid.model.board.HomePanel;
+import cl.uchile.dcc.citricliquid.model.board.InterfacePanel;
+import cl.uchile.dcc.citricliquid.model.board.NeutralPanel;
 import cl.uchile.dcc.citricliquid.model.normas.InterfaceNorma;
 import cl.uchile.dcc.citricliquid.model.normas.StarsNorma;
 import cl.uchile.dcc.citricliquid.model.normas.WinsNorma;
@@ -15,6 +18,7 @@ class UnitsTest {
     private Player suguri;
     public InterfaceNorma WinsNorma = new WinsNorma();
     public StarsNorma starsNorma = new StarsNorma();
+    InterfacePanel homePanelSuguri;
 
     private final static String WILD_NAME = "Chicken";
     private WildUnit chicken;
@@ -24,15 +28,28 @@ class UnitsTest {
 
     @BeforeEach
     void setUp() {
-        suguri = new Player(PLAYER_NAME, 4, 1, 0, 2);
+        homePanelSuguri = new HomePanel(0);
+        suguri = new Player(PLAYER_NAME, 4, 1, 0, 2, homePanelSuguri);
         chicken = new WildUnit(WILD_NAME, 3, 1, 1, 1);
         storeManager = new BossUnit(BOSS_NAME, 8, 3, 2, -1);
     }
 
     @Test
     public void constructorTest() {
-        final var expectedSuguri = new Player(PLAYER_NAME, 4, 1, 0, 2);
+        final var expectedSuguri = new Player(PLAYER_NAME, 4, 1, 0, 2, homePanelSuguri);
         Assertions.assertEquals(expectedSuguri, suguri);
+    }
+
+    @Test
+    public void getPanelsTest() {
+        Assertions.assertEquals(homePanelSuguri, suguri.getCurrentPanel());
+        Assertions.assertEquals(homePanelSuguri, suguri.getHomePanel());
+        Assertions.assertEquals(0, suguri.getCurrentPanelID());
+        InterfacePanel nuevoPanel = new NeutralPanel(1);
+        suguri.setCurrentPanel(nuevoPanel);
+        Assertions.assertEquals(nuevoPanel, suguri.getCurrentPanel());
+        Assertions.assertEquals(homePanelSuguri, suguri.getHomePanel());
+        Assertions.assertEquals(1, suguri.getCurrentPanelID());
     }
 
     @Test
@@ -68,7 +85,7 @@ class UnitsTest {
         Assertions.assertTrue(suguri.equals(suguri));
         final var o = new Object();
         Assertions.assertFalse(suguri.equals(o));
-        final var expectedSuguri = new Player(PLAYER_NAME, 4, 1, 0, 2);
+        final var expectedSuguri = new Player(PLAYER_NAME, 4, 1, 0, 2, homePanelSuguri);
         Assertions.assertTrue(suguri.equals(expectedSuguri));
 
         Assertions.assertTrue(chicken.equals(chicken));
@@ -111,7 +128,7 @@ class UnitsTest {
 
     @Test
     public void copyTest() {
-        Player expectedSuguri = new Player(PLAYER_NAME, 4, 1, 0, 2);
+        Player expectedSuguri = new Player(PLAYER_NAME, 4, 1, 0, 2, homePanelSuguri);
         Player actualSuguri = suguri.copy();
         // Checks that the copied player have the same parameters as the original
         Assertions.assertEquals(expectedSuguri, actualSuguri);
@@ -156,4 +173,39 @@ class UnitsTest {
                 roll + "is not in [1, 6]" + System.lineSeparator()
                         + "Test failed with random seed: " + testSeed);
     }
+
+    @RepeatedTest(100)
+    public void attackConsistencyTest() {
+        final long testSeed = new Random().nextLong();
+        suguri.setSeed(testSeed);
+        final int attack = suguri.attacks();
+        Assertions.assertTrue(attack >= 2 && attack <= 7,
+                attack + "is not a valid attack value" + System.lineSeparator()
+                        + "Test failed with random seed: " + testSeed);
+    }
+
+    @RepeatedTest(100)
+    public void defenseConsistencyTest() {
+        final long testSeed = new Random().nextLong();
+        suguri.setSeed(testSeed);
+        suguri.defends(chicken); //tiene 1 de ataque
+        int hp = suguri.getCurrentHp();
+        Assertions.assertTrue(hp >= 0 && hp <4 ,
+                hp + "is not a valid hp value" + System.lineSeparator()
+                        + "Test failed with random seed: " + testSeed);
+
+
+    }
+
+    @RepeatedTest(100)
+    public void dodgesConsistencyTest() {
+        final long testSeed = new Random().nextLong();
+        suguri.setSeed(testSeed);
+        suguri.dodges(chicken);
+        int hp = suguri.getCurrentHp();
+        Assertions.assertTrue(hp >= 0 && hp <=4 ,
+                hp + "is not a valid hp value" + System.lineSeparator()
+                        + "Test failed with random seed: " + testSeed);
+    }
+
 }

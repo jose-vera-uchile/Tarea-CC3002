@@ -2,13 +2,13 @@ package cl.uchile.dcc.citricliquid.model.board;
 
 import cl.uchile.dcc.citricliquid.model.units.Player;
 
-public class EncounterPanel extends AbstractPanel{
+public class EncounterPanel extends AbstractEnemyPanel{
     /**
      * Constructor for the abstract class, only receives the id
      *
      * @param id : integer to differentiate a panel from another
      */
-    protected EncounterPanel(int id) {
+    public EncounterPanel(int id) {
         super(id);
     }
 

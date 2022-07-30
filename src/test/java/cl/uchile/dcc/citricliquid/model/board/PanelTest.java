@@ -1,6 +1,8 @@
 package cl.uchile.dcc.citricliquid.model.board;
 
+import cl.uchile.dcc.citricliquid.model.units.AbstractEnemy;
 import cl.uchile.dcc.citricliquid.model.units.Player;
+import cl.uchile.dcc.citricliquid.model.units.WildUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
@@ -8,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,13 +22,13 @@ class PanelTest {
     private InterfacePanel neutralPanel;
     private InterfacePanel bonusPanel;
     private InterfacePanel dropPanel;
-    private InterfacePanel encounterPanel;
-    private InterfacePanel bossPanel;
+    private AbstractEnemyPanel encounterPanel;
+    private AbstractEnemyPanel bossPanel;
     private InterfacePanel drawPanel;
 
     @BeforeEach
     public void setUp(){
-        suguri = new Player(PLAYER_NAME, 4, 1, 0, 2);
+        suguri = new Player(PLAYER_NAME, 4, 1, 0, 2, homePanel);
         suguri.increaseStarsBy(10);
         homePanel = new HomePanel(0);
         neutralPanel = new NeutralPanel(1);
@@ -43,7 +46,7 @@ class PanelTest {
 
     @Test
     public void nextPanelsTest() {
-        var list = new HashSet<InterfacePanel>();
+        var list = new ArrayList<InterfacePanel>();
         Assertions.assertEquals(list, homePanel.getNextPanels());
         list.add(neutralPanel);
         list.add(bonusPanel);
@@ -83,11 +86,21 @@ class PanelTest {
         Assertions.assertEquals(4, suguri.getCurrentHp());
     }
 
+    @Test
+    public void enemyPanelsTest(){
+        AbstractEnemy chicken = new WildUnit("Chicken", 3, 1, 1, 1);
+        Assertions.assertFalse(encounterPanel.hasEnemyInPanel());
+        encounterPanel.addEnemy(chicken);
+        Assertions.assertTrue(encounterPanel.hasEnemyInPanel());
+        encounterPanel.removeEnemy(chicken);
+        Assertions.assertFalse(encounterPanel.hasEnemyInPanel());
+
+    }
 
     @RepeatedTest(100)
     public void bonusPanelConsistencyTest() {
         final long testSeed = new Random().nextLong();
-        int expectedStars = 0;
+        int expectedStars = 10;
         assertEquals(expectedStars, suguri.getStars());
         final var testRandom = new Random(testSeed);
         suguri.setSeed(testSeed);
@@ -116,7 +129,4 @@ class PanelTest {
             suguri.normaClear();
         }
     }
-
-
-
 }

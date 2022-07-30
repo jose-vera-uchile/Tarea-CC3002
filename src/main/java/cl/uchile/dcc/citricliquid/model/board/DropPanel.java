@@ -9,7 +9,7 @@ public class DropPanel extends AbstractPanel{
      *
      * @param id : integer to differentiate a panel from another
      */
-    protected DropPanel(int id) {
+    public DropPanel(int id) {
         super(id);
     }
 

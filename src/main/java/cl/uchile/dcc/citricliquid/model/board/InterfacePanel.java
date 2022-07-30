@@ -8,7 +8,7 @@ public interface InterfacePanel {
 
     int getId();
 
-    Set<InterfacePanel> getNextPanels();
+    List<InterfacePanel> getNextPanels();
 
     void addNextPanel(InterfacePanel nPanel);
 

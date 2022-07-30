@@ -8,7 +8,7 @@ public class HomePanel extends AbstractPanel{
      *
      * @param id : integer to differentiate a panel from another
      */
-    protected HomePanel(int id) {
+    public HomePanel(int id) {
         super(id);
     }
 

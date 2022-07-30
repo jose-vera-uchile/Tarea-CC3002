@@ -8,7 +8,7 @@ public class NeutralPanel extends AbstractPanel{
      *
      * @param id : integer to differentiate a panel from another
      */
-    protected NeutralPanel(int id) {
+    public NeutralPanel(int id) {
         super(id);
     }
 

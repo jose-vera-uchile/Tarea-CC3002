@@ -9,7 +9,7 @@ public class BonusPanel extends AbstractPanel{
      *
      * @param id : integer to differentiate a panel from another
      */
-    protected BonusPanel(int id) {
+    public BonusPanel(int id) {
         super(id);
     }
 

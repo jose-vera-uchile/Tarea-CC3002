@@ -26,8 +26,7 @@ public abstract class AbstractUnit implements InterfaceUnit {
      * @param evd
      *     the base evasion of the character.
      */
-    public AbstractUnit(final String name, final int hp, final int atk, final int def,
-                  final int evd) {
+    public AbstractUnit(final String name, final int hp, final int atk, final int def, final int evd) {
         this.name = name;
         this.maxHp = currentHp = hp;
         this.atk = atk;
@@ -102,7 +101,7 @@ public abstract class AbstractUnit implements InterfaceUnit {
     }
 
     /**
-     * Set's the seed for this player's random number generator.
+     * Sets the seed for this player's random number generator.
      *
      * <p>The random number generator is used for taking non-deterministic decisions, this method is
      * declared to avoid non-deterministic behaviour while testing the code.
@@ -126,6 +125,35 @@ public abstract class AbstractUnit implements InterfaceUnit {
      */
     public int roll() {
         return random.nextInt(6) + 1;
+    }
+
+    /*
+     * Returns the value for the attack
+     */
+    public int attacks() {
+        return this.roll()+atk;
+    }
+
+    /*
+     * Receives a unit, and it uses the formula to determine
+     * how many hp are going to be deducted from the current hp
+     */
+    public void defends(AbstractUnit unit) {
+        this.setCurrentHp(this.currentHp - Math.max(1, unit.attacks() - (this.roll() - this.def)));
+    }
+
+    /*
+     * Receives a unit, it calculates the value of the evasion of the player, then
+     * calculates the value of the unit attack. Finally compares them and if the
+     * evasion is equal or less than the attack, then it deducts the value of the attack
+     * from the currenHp of the player
+     */
+    public void dodges(AbstractUnit unit) {
+        var evasion = this.roll() + evd;
+        var unitAttack = unit.attacks();
+        if (unitAttack >= evasion) {
+            this.setCurrentHp(this.currentHp -  unitAttack);
+        }
     }
 
     @Override

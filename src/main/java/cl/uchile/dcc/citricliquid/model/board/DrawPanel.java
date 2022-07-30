@@ -8,7 +8,7 @@ public class DrawPanel extends AbstractPanel{
      *
      * @param id : integer to differentiate a panel from another
      */
-    protected DrawPanel(int id) {
+    public DrawPanel(int id) {
         super(id);
     }
 
