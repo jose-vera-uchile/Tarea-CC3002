@@ -8,7 +8,7 @@ public class RollDice extends AbstractState {
         super(controller);
     }
 
-    public void nextState(){
+    public void activateState(){
         int roll = this.controller.getPlayerPlaying().roll();
         this.controller.setState(new Desplazar(this.controller, roll));
     }

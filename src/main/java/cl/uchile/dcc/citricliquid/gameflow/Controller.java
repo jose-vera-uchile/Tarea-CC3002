@@ -5,9 +5,7 @@ import cl.uchile.dcc.citricliquid.gameflow.states.StandBy;
 import cl.uchile.dcc.citricliquid.model.board.InterfacePanel;
 import cl.uchile.dcc.citricliquid.model.units.Player;
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Controller {
     public ArrayList<Player> playerList;

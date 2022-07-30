@@ -2,15 +2,17 @@ package cl.uchile.dcc.citricliquid.model.controller;
 
 import cl.uchile.dcc.citricliquid.gameflow.Controller;
 import cl.uchile.dcc.citricliquid.gameflow.states.AbstractState;
-import cl.uchile.dcc.citricliquid.gameflow.states.StandBy;
+import cl.uchile.dcc.citricliquid.gameflow.states.Recovery;
+import cl.uchile.dcc.citricliquid.gameflow.states.RollDice;
 import cl.uchile.dcc.citricliquid.model.board.*;
 import cl.uchile.dcc.citricliquid.model.units.Player;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Random;
 
 class ControllerTests {
     private Player suguri;
@@ -85,5 +87,45 @@ class ControllerTests {
         Assertions.assertEquals(homePanel, suguri.getCurrentPanel());
         controller.movePlayer(controller.getPlayerPlaying(), controller.getPlayerPlaying().getCurrentPanel().getNextPanels().get(0));
         Assertions.assertEquals(neutralPanel, suguri.getCurrentPanel());
+    }
+
+    @Test
+    public void standByStateTest(){
+        AbstractState startingStandByState = this.controller.getState();
+        this.controller.getState().activateState();
+        Assertions.assertNotEquals(startingStandByState, this.controller.getState());
+        this.controller.setState(startingStandByState);
+        this.controller.getPlayerPlaying().setCurrentHp(0);
+        this.controller.getState().activateState();
+        Assertions.assertNotEquals(startingStandByState, this.controller.getState());
+    }
+
+    @RepeatedTest(100)
+    public void recoveryStateConsistencyTest(){
+        AbstractState recovery = new Recovery(controller);
+        this.controller.setState(recovery);
+
+        final long testSeed = new Random().nextLong();
+        controller.getPlayerPlaying().setSeed(testSeed);
+        controller.getState().activateState();
+
+        Assertions.assertTrue(controller.getState() != recovery,
+                "El controlador no cambio de estado" + System.lineSeparator()
+                        + "Test failed with random seed: " + testSeed);
+    }
+
+    @RepeatedTest(100)
+    public void rollDiceStateTest(){
+        AbstractState rollDice = new RollDice(controller);
+        this.controller.setState(rollDice);
+
+        final long testSeed = new Random().nextLong();
+        controller.getPlayerPlaying().setSeed(testSeed);
+        controller.getState().activateState();
+
+        Assertions.assertTrue(controller.getState() != rollDice,
+                "El controlador no cambio de estado" + System.lineSeparator()
+                        + "Test failed with random seed: " + testSeed);
+
     }
 }
