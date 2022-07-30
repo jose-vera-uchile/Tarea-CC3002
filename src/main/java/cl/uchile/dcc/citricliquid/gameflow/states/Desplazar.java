@@ -13,13 +13,16 @@ public class Desplazar extends AbstractState{
         this.movimientosRestantes = movimientosRestantes;
     }
 
+    public int getMovimientosRestantes(){
+        return this.movimientosRestantes;
+    }
+
     public void activateState() {
         if (this.movimientosRestantes > 0) {
             List<InterfacePanel> nextPanel = this.controller.getPlayerPlaying().getCurrentPanel().getNextPanels();
             this.controller.movePlayer(this.controller.getPlayerPlaying(), nextPanel.get(0));
             movimientosRestantes--;
-            //Aca debe ir el llamado de si se quiere detener, por ahora no implementare eso sino que
-            //el juego funcionara de forma que no te puedas detener a menos que termines de moverte
+            //Aca debe ir el llamado de si se quiere detener, por ahora no implementare eso sino que el juego funcionara de forma que no te puedas detener a menos que termines de moverte
             this.controller.setState(new Desplazar(this.controller, movimientosRestantes));
         }
         else {

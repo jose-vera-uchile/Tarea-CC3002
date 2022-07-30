@@ -1,9 +1,7 @@
 package cl.uchile.dcc.citricliquid.model.controller;
 
 import cl.uchile.dcc.citricliquid.gameflow.Controller;
-import cl.uchile.dcc.citricliquid.gameflow.states.AbstractState;
-import cl.uchile.dcc.citricliquid.gameflow.states.Recovery;
-import cl.uchile.dcc.citricliquid.gameflow.states.RollDice;
+import cl.uchile.dcc.citricliquid.gameflow.states.*;
 import cl.uchile.dcc.citricliquid.model.board.*;
 import cl.uchile.dcc.citricliquid.model.units.Player;
 import org.junit.jupiter.api.Assertions;
@@ -128,4 +126,66 @@ class ControllerTests {
                         + "Test failed with random seed: " + testSeed);
 
     }
+
+    @Test
+    public void GetStarsTest(){
+        AbstractState getStarsStartingState = new GetStars(controller);
+        controller.setState(getStarsStartingState);
+        Assertions.assertEquals(0, controller.getPlayerPlaying().getStars());
+        Assertions.assertEquals(getStarsStartingState, controller.getState());
+        controller.getState().activateState();
+        Assertions.assertEquals(1, controller.getPlayerPlaying().getStars());
+        Assertions.assertNotEquals(getStarsStartingState, controller.getState());
+    }
+
+    @Test
+    public void DesplazarStateTest(){
+        Desplazar desplazarState = new Desplazar(controller, 3);
+        controller.setState(desplazarState);
+        Desplazar currentState = (Desplazar) controller.getState();
+        Assertions.assertEquals(3, currentState.getMovimientosRestantes());
+        controller.getState().activateState();
+        currentState = (Desplazar) controller.getState();
+        Assertions.assertEquals(2, currentState.getMovimientosRestantes());
+        controller.getState().activateState();
+        controller.getState().activateState();
+        controller.getState().activateState();
+    }
+
+    @Test
+    public void DetenidoStateTest(){
+        AbstractState detenidoState = new Detenido(controller, true);
+        InterfacePanel currentPanel = controller.getPlayerPlaying().getCurrentPanel();
+        currentPanel.addPlayer(juan);
+        controller.setState(detenidoState);
+        controller.getState().activateState();
+        Assertions.assertNotEquals(detenidoState, controller.getState());
+        detenidoState = new Detenido(controller, false);
+        controller.setState(detenidoState);
+        controller.getState().activateState();
+        Assertions.assertNotEquals(detenidoState, controller.getState());
+    }
+
+    @Test
+    public void BatallaStateTest(){
+        AbstractState batallaState = new Batalla(controller);
+        controller.setState(batallaState);
+        Assertions.assertEquals(batallaState, controller.getState());
+
+    }
+
+
+    @Test
+    public void SeleccionarDetenerseStateTest(){
+        SeleccionarDetenerse seleccionarDetenerseState = new SeleccionarDetenerse(controller, 3);
+        seleccionarDetenerseState.decidirDetenerse(true);
+        controller.setState(seleccionarDetenerseState);
+        controller.getState().activateState();
+        Assertions.assertNotEquals(seleccionarDetenerseState, controller.getState());
+        seleccionarDetenerseState.decidirDetenerse(false);
+        controller.setState(seleccionarDetenerseState);
+        controller.getState().activateState();
+        Assertions.assertNotEquals(seleccionarDetenerseState, controller.getState());
+    }
+
 }
